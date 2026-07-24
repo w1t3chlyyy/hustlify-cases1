@@ -1,0 +1,118 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+}
+
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+html,
+body {
+  background: #0a0a0a;
+  color: #f2f2f0;
+  overscroll-behavior-y: none;
+}
+
+body {
+  font-family: var(--font-body), sans-serif;
+}
+
+::selection {
+  background: #f2f2f0;
+  color: #0a0a0a;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-thumb {
+  background: #2a2a2a;
+  border-radius: 3px;
+}
+
+.grain::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  pointer-events: none;
+  background-image: url("/noise.svg");
+  opacity: 0.05;
+  mix-blend-mode: overlay;
+}
+
+/* Статичная подложка вместо 3D: тонкая сетка + мягкое свечение сверху.
+   Никакого JS/canvas — нулевая цена по производительности. */
+.bg-grid {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image:
+    radial-gradient(ellipse 55% 40% at 50% -10%, rgba(242, 242, 240, 0.07), transparent 70%),
+    linear-gradient(#2a2a2a 1px, transparent 1px),
+    linear-gradient(90deg, #2a2a2a 1px, transparent 1px);
+  background-size: 100% 100%, 56px 56px, 56px 56px;
+  opacity: 0.5;
+}
+
+.eyebrow {
+  font-family: var(--font-mono), monospace;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  font-size: 0.68rem;
+  color: #8a8a8a;
+}
+
+.hairline {
+  border-color: #2a2a2a;
+}
+
+/* Заголовки чуть плотнее и с лёгким переливом веса при наведении, где уместно */
+h1, h2, h3, .font-display {
+  font-optical-sizing: auto;
+}
+
+/* Ссылка с подчёркиванием, растущим слева направо */
+.link-underline {
+  position: relative;
+  text-decoration: none;
+}
+.link-underline::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  height: 1px;
+  width: 100%;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.link-underline:hover::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+/* Видимый focus-visible для клавиатурной навигации */
+a:focus-visible,
+button:focus-visible {
+  outline: 1px solid #f2f2f0;
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
