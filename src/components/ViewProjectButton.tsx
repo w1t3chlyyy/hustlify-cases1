@@ -1,8 +1,3 @@
-"use client";
-
-import { openExternal, hapticTap } from "@/lib/telegram";
-import MagneticButton from "@/components/MagneticButton";
-
 export default function ViewProjectButton({ url }: { url: string }) {
   return (
     <MagneticButton
@@ -13,7 +8,6 @@ export default function ViewProjectButton({ url }: { url: string }) {
       }}
     >
       Посмотреть проект
-       <span>↗</span>
     </MagneticButton>
   );
 }
