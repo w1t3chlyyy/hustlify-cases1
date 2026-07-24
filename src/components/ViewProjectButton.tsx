@@ -13,7 +13,7 @@ export default function ViewProjectButton({ url }: { url: string }) {
       }}
     >
       Посмотреть проект
-      <span className="transition-transform group-hover:translate-x-1">↗</span>
+       <span>↗</span>
     </MagneticButton>
   );
 }
