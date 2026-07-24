@@ -1,3 +1,8 @@
+"use client";
+
+import { openExternal, hapticTap } from "@/lib/telegram";
+import MagneticButton from "@/components/MagneticButton";
+
 export default function ViewProjectButton({ url }: { url: string }) {
   return (
     <MagneticButton
