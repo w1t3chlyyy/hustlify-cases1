@@ -114,7 +114,7 @@ button:focus-visible {
   gap: 0.5rem;
   padding: 15px 25px;
   border: unset;
-  border-radius: 15px;
+  border-radius: 50px;
   color: #e8e8e8;
   z-index: 1;
   background: #212121;
@@ -135,7 +135,7 @@ button:focus-visible {
   left: 0;
   height: 100%;
   width: 0;
-  border-radius: 15px;
+  border-radius: 50px;
   background-color: #e8e8e8;
   z-index: -1;
   -webkit-box-shadow: 4px 8px 19px -3px rgba(255, 255, 255, 0.27);
