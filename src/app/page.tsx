@@ -46,7 +46,7 @@ export default function HomePage() {
       >
         <MagneticButton href="/cases" onClick={() => hapticTap("medium")}>
           Смотреть кейсы
-          <span className="transition-transform group-hover:translate-x-1">→</span>
+          <span>→</span>
         </MagneticButton>
       </motion.div>
 
