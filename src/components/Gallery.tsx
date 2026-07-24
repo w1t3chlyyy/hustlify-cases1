@@ -48,7 +48,7 @@ export default function Gallery({ images, alt }: { images: string[]; alt: string
               alt={`${alt} — фото ${index + 1}`}
               fill
               sizes="(max-width: 640px) 100vw, 640px"
-              className="object-cover grayscale"
+              className="object-cover"
               priority={index === 0}
             />
           </motion.div>
