@@ -1,12 +1,49 @@
 import { InlineKeyboard } from "grammy";
 import { CaseItem } from "@/types/case";
 import type { AddStep } from "./addFlow";
+import type { WelcomeButton } from "./welcomeService";
 
 export function mainMenuKeyboard(): InlineKeyboard {
   return new InlineKeyboard()
     .text("📋 Список кейсов", "m:list")
     .row()
-    .text("➕ Добавить кейс", "m:add");
+    .text("➕ Добавить кейс", "m:add")
+    .row()
+    .text("⚙️ Приветствие (/start)", "m:welcome");
+}
+
+export function welcomeSettingsKeyboard(): InlineKeyboard {
+  return new InlineKeyboard()
+    .text("✏️ Текст", "w:text")
+    .row()
+    .text("🖼 Фото", "w:photo")
+    .row()
+    .text("🔘 Кнопки", "w:buttons")
+    .row()
+    .text("👁 Предпросмотр", "w:preview")
+    .row()
+    .text("⬅️ В меню", "m:menu");
+}
+
+export function welcomeButtonsKeyboard(buttons: WelcomeButton[]): InlineKeyboard {
+  const kb = new InlineKeyboard();
+  buttons.forEach((b, i) => {
+    kb.text(`🗑 ${b.label}`, `w:btn:del:${i}`).row();
+  });
+  kb.text("➕ Добавить кнопку", "w:btn:add").row();
+  kb.text("⬅️ Назад", "w:menu");
+  return kb;
+}
+
+/** Builds an inline keyboard of link-buttons from stored welcome settings, or undefined if there are none. */
+export function buttonsToKeyboard(buttons: WelcomeButton[]): InlineKeyboard | undefined {
+  if (!buttons.length) return undefined;
+  const kb = new InlineKeyboard();
+  buttons.forEach((b, i) => {
+    kb.url(b.label, b.url);
+    if (i < buttons.length - 1) kb.row();
+  });
+  return kb;
 }
 
 export function cancelKeyboard(): InlineKeyboard {
