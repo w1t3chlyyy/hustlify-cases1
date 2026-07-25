@@ -2,6 +2,7 @@ import { Context } from "grammy";
 import { CaseInput } from "@/types/case";
 import { setState, clearState, BotState } from "./state";
 import { getCase, updateCase, deleteCase, uploadPhotoFromTelegram } from "./caseService";
+import { broadcastCasePublished } from "./broadcast";
 import { formatCaseSummary } from "./format";
 import {
   cancelKeyboard,
@@ -25,8 +26,14 @@ export async function handleEditAction(ctx: Context, userId: number, field: stri
   if (field === "pub") {
     const c = await getCase(id);
     if (!c) return void (await ctx.reply("Кейс не найден."));
-    const updated = await updateCase(id, { is_published: !c.is_published });
+    const willPublish = !c.is_published;
+    const updated = await updateCase(id, { is_published: willPublish });
     await ctx.editMessageText(formatCaseSummary(updated), { reply_markup: caseDetailKeyboard(updated) });
+    if (willPublish) {
+      await broadcastCasePublished(updated).catch((err) =>
+        console.error("[broadcast] failed:", err)
+      );
+    }
     return;
   }
 
@@ -125,3 +132,4 @@ export async function handleEditFlowMessage(ctx: Context, userId: number, state:
     await ctx.reply(`⚠️ Не удалось сохранить: ${err.message ?? "неизвестная ошибка"}`);
   }
 }
+
