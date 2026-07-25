@@ -2,6 +2,7 @@ import { Context, InlineKeyboard } from "grammy";
 import { CaseInput } from "@/types/case";
 import { setState, clearState, BotState } from "./state";
 import { createCase, slugify, uploadPhotoFromTelegram } from "./caseService";
+import { broadcastCasePublished } from "./broadcast";
 import {
   cancelKeyboard,
   skipCancelKeyboard,
@@ -209,6 +210,13 @@ export async function finalizeAdd(
       `✅ Кейс «${created.title}» сохранён (${publish ? "опубликован" : "черновик"}).`,
       { reply_markup: mainMenuKeyboard() }
     );
+    if (publish) {
+      // Awaited on purpose: on serverless (Vercel) a "fire and forget" promise
+      // can be killed once the response is sent, so we wait for it here.
+      await broadcastCasePublished(created).catch((err) =>
+        console.error("[broadcast] failed:", err)
+      );
+    }
   } catch (err: any) {
     if (err?.code === "23505") {
       await ctx.reply(`⚠️ Слаг «${d.slug}» уже занят другим кейсом. Введите другой слаг:`, {
