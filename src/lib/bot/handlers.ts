@@ -3,7 +3,7 @@ import { isAdmin } from "./auth";
 import { getState, setState, clearState } from "./state";
 import { listCases, getCase } from "./caseService";
 import { formatCaseSummary } from "./format";
-import { mainMenuKeyboard, casesListKeyboard, caseDetailKeyboard } from "./keyboards";
+import { mainMenuKeyboard, casesListKeyboard, caseDetailKeyboard, buttonsToKeyboard } from "./keyboards";
 import {
   AddStep,
   startAddFlow,
@@ -14,8 +14,34 @@ import {
   finalizeAdd,
 } from "./addFlow";
 import { handleEditAction, handleGalleryDoneEdit, handleEditFlowMessage } from "./editFlow";
+import { getWelcomeSettings } from "./welcomeService";
+import { registerBotUser } from "./broadcast";
+import {
+  showWelcomeMenu,
+  startEditText,
+  startEditPhoto,
+  showButtonsMenu,
+  startAddButton,
+  deleteButton,
+  showPreview,
+  handleWelcomeFlowMessage,
+} from "./welcomeFlow";
 
 export function registerHandlers(bot: Bot) {
+  bot.command("start", async (ctx) => {
+    const userId = ctx.from?.id;
+    if (userId) {
+      await registerBotUser(userId, ctx.from?.username, ctx.from?.first_name);
+    }
+    const s = await getWelcomeSettings();
+    const kb = buttonsToKeyboard(s.buttons);
+    if (s.photo_url) {
+      await ctx.replyWithPhoto(s.photo_url, { caption: s.text, reply_markup: kb });
+    } else {
+      await ctx.reply(s.text, { reply_markup: kb });
+    }
+  });
+
   bot.command("admin", async (ctx) => {
     if (!isAdmin(ctx.from?.id)) return; // stay silent for non-admins
     await clearState(ctx.from!.id);
@@ -55,6 +81,42 @@ export function registerHandlers(bot: Bot) {
 
       if (data === "m:add") {
         await startAddFlow(ctx, userId);
+        return;
+      }
+
+      if (data === "m:welcome" || data === "w:menu") {
+        await showWelcomeMenu(ctx, userId);
+        return;
+      }
+
+      if (data === "w:text") {
+        await startEditText(ctx, userId);
+        return;
+      }
+
+      if (data === "w:photo") {
+        await startEditPhoto(ctx, userId);
+        return;
+      }
+
+      if (data === "w:buttons") {
+        await showButtonsMenu(ctx, userId);
+        return;
+      }
+
+      if (data === "w:btn:add") {
+        await startAddButton(ctx, userId);
+        return;
+      }
+
+      if (data.startsWith("w:btn:del:")) {
+        const index = Number(data.slice("w:btn:del:".length));
+        await deleteButton(ctx, userId, index);
+        return;
+      }
+
+      if (data === "w:preview") {
+        await showPreview(ctx, userId);
         return;
       }
 
@@ -133,6 +195,10 @@ export function registerHandlers(bot: Bot) {
       }
       if (state.step.startsWith("edit:")) {
         await handleEditFlowMessage(ctx, userId, state);
+        return;
+      }
+      if (state.step.startsWith("welcome:")) {
+        await handleWelcomeFlowMessage(ctx, userId, state);
         return;
       }
     } catch (err) {
