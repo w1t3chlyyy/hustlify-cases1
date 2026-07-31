@@ -40,7 +40,7 @@ export async function broadcastCasePublished(c: CaseItem): Promise<void> {
   if (!ids.length) return;
 
   const bot = getBot();
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL;
+  const siteUrl = process.env.NEXT_PUBLIC_MINIAPP_URL;
   const caption = [
     "🆕 Новый кейс!",
     "",
@@ -51,8 +51,8 @@ export async function broadcastCasePublished(c: CaseItem): Promise<void> {
     .join("\n");
 
   const kb = new InlineKeyboard();
-  if (siteUrl) {
-    kb.webApp("👀 Смотреть кейс", `${siteUrl}/`);
+    if (miniAppUrl) {
+       kb.webApp("👀 Смотреть кейс", `${miniAppUrl}/cases/${c.slug}`);
   }
 
   for (const id of ids) {
