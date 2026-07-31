@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Space_Grotesk, Inter, JetBrains_Mono } from "next/font/google";
 import Script from "next/script";
 import TelegramInit from "@/components/TelegramInit";
+import AppBackground from "@/components/AppBackground";
 import "./globals.css";
 
 const display = Space_Grotesk({
@@ -49,7 +50,7 @@ export default function RootLayout({
         />
       </head>
       <body className="grain relative min-h-screen bg-ink text-paper antialiased">
-        <div className="bg-grid" aria-hidden />
+        <AppBackground />
         <TelegramInit />
         <div className="relative z-10">{children}</div>
       </body>
