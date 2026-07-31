@@ -44,7 +44,7 @@ export default function HomePage() {
         transition={{ duration: 0.6, delay: 0.55 }}
         className="mt-12"
       >
-        <MagneticButton href="/cases" onClick={() => hapticTap("medium")}>
+        <MagneticButton href="https://t.me/HustlifyCasesBot/app" onClick={() => hapticTap("medium")}>
           Смотреть кейсы
           <span>→</span>
         </MagneticButton>
