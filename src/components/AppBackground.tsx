@@ -6,6 +6,9 @@ export default function AppBackground() {
   return (
     <div className="fixed inset-0 z-0" aria-hidden>
       <Ferrofluid
+        className="h-full w-full"
+        dpr={typeof window !== "undefined" ? window.devicePixelRatio : 1}
+        mixBlendMode="normal"
         colors={["#ffffff", "#ffffff", "#ffffff"]}
         speed={0.5}
         scale={1.6}
