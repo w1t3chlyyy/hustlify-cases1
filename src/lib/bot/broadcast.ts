@@ -40,7 +40,7 @@ export async function broadcastCasePublished(c: CaseItem): Promise<void> {
   if (!ids.length) return;
 
   const bot = getBot();
-  const siteUrl = process.env.NEXT_PUBLIC_MINIAPP_URL;
+  const miniAppUrl = process.env.NEXT_PUBLIC_MINIAPP_URL;
   const caption = [
     "🆕 Новый кейс!",
     "",
