@@ -52,7 +52,7 @@ export async function broadcastCasePublished(c: CaseItem): Promise<void> {
 
   const kb = new InlineKeyboard();
     if (miniAppUrl) {
-       kb.webApp("👀 Смотреть кейс", `${miniAppUrl}/cases/${c.slug}`);
+       kb.webApp("👀 Смотреть кейс", miniAppUrl);
   }
 
   for (const id of ids) {
